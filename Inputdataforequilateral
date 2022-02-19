@@ -1,0 +1,28 @@
+clc; clear
+close all
+
+% Number of Nodes in different dimensions
+nt = 500;
+ift = 0.007;
+geomery = 2;
+pdrop   = 10;
+% Throat radius data
+minR = 1e-06; maxR = 20e-06; 
+etaR = 3; deltaR = 0.2;
+x    = rand(nt,1);
+R        = weibull(maxR,minR,deltaR,etaR,x);
+porearea = 3*R.^2.*cot(pi/6);
+% Throat Length data
+minL = 20e-6; maxL   = 50e-6; 
+etaL = 3;     deltaL = 0.2;
+l    = weibull(maxL,minL,deltaL,etaL,x);
+% Aspect ratio data
+minRAngle = zeros(nt,1);
+% Advancing Angle data
+minAdvancingAngle = 0; maxAdvancingAngle = 60;
+% Percentage of each geometry
+squarePercThroat = 0; circPercThroat = 100;
+squarePercPore   = 0; circPercPore = 100;
+water_viscosity = 1e-3; %Pa_s = 1 cp ----(1e-3 = 1 cp)
+oil_viscosity   = 1e-3; %Pa_s = 1 cp ----(1e-3 = 1 cp)
+[pc_curve, Krw, Kro, Sw,check] = Primary_drainage_displacement(recang,geometry, ift, R, porearea,watervisco,oilvisco, pdrop, l, nt) 

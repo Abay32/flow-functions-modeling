@@ -1,0 +1,126 @@
+clear all
+close all
+clc
+L = 30;
+n = 100;
+nt = 6000000
+T1s = 1;
+T0 =0;
+T2s = 0.0;
+dx = L/n;
+alpha = 0.00001;
+t_final = 8000000;
+dt      = t_final/nt;
+x       = linspace(dx/2, L-dx/2, n);
+T       =  zeros(n,1)*T0;
+dTdt    = zeros(n,1);
+t       = 0;%linspace(0, t_final, nt);
+Pc    = zeros(n, 4);
+chi   = zeros(n,1);
+omega = zeros(n,1);
+beta = 0.001;
+pc_in = 10e7;
+pc_f  = -1e2;
+j = 1
+while t < t_final
+    for i = 2:n-1
+        dTdt(i) = alpha*(-(T(i)-T(i-1))/dx^2 + (T(i+1)-T(i))/dx^2);
+    end
+    dTdt(1) = alpha*(-(T(1)-T1s)/dx^2 + (T(2)-T(1))/dx^2);
+    dTdt(n-1) = alpha*(-(T(n-1)-T(n-2))/dx^2 + (T2s-T(n-1))/dx^2);
+    T     = T + dTdt*dt; T(end) = T2s;
+    chi   = chi + (1/t_final).*T.*dt;
+    omega = chi./(beta + chi);
+    if j ==  10000
+        T1 = T;
+        Pc(:,1) = omega.*(pc_f - pc_in) + pc_in;
+    elseif j == 800000
+        T2 = T;
+        Pc(:,2) = omega.*(pc_f - pc_in) + pc_in;
+    elseif j == 2000000
+        T3  = T;
+        Pc(:,3) = omega.*(pc_f - pc_in) + pc_in;
+    elseif j == nt
+        Pc(:,4) = omega.*(pc_f - pc_in) + pc_in; T4 = T;
+    end
+
+
+
+    t = t + dt;
+    
+    j = j+1;
+end
+
+T_sta      =  linspace(0,t_final, n)';
+T_sta(2:10)= 200; T_sta(11:30) = 500; T_sta(31:50) = 700;
+chi_sta    =  (1/t_final).*T.*T_sta;
+omega_sta  = chi_sta./(chi_sta + beta);
+Pc_sta     = omega_sta.*(pc_f - pc_in) + pc_in;
+
+
+
+
+%Pc = omega.*(pc_f - pc_in) + pc_in;
+clf
+month = t_final/(30*24*3600);
+
+T = [T1;T2;T3;T4];
+%
+figure(4)
+c1 = linspace(0.0, month, length(x));  
+[ax,p1,p2] = plotyy(x, T4, x(1:end-1), Pc_sta(1:end-1)/1e6);
+hold(ax(1), 'on')
+scatter(ax(1),x, T4, 20, c1)
+xlabel('x [m]');%('$\widetilde{\chi}$ [-]');
+ylabel(ax(1), 'X_w^{\rm CO_2}')
+hold(ax(2), 'on')
+scatter(ax(2),x(1:end-1), Pc_sta(1:end-1)/1e6, 20, c1(1:end-1))
+
+
+
+ylabel(ax(2), 'P_c [MPa]')
+set(gca,'fontsize', 13)
+h = colorbar('northoutside');
+set(get(h,'title'), 'string', 'Time');
+box on
+
+
+x  = [x';x';x';x'];
+figure(1)
+c1 = linspace(0.0,month, length(x));  
+%
+scatter(x, T, 20, c1)
+xlabel('x [m]');%('$\widetilde{\chi}$ [-]');
+ylabel('X_w^{CO_2}')
+%legend('drain/imbib \theta_{in}','dyn. drain 1' ,'dyn. imbib 1', 'dyn. drain 2', 'dyn. imbib  2',  'drain/imbib for \theta_f','cor. for initial wet','cor. for dyn.  drain 1','cor. for dyn.  imbib  1','cor. for dyn. drain 2' ,'cor. for dyn. imbib  2','cor. for final wet')%
+set(gca,'fontsize', 15)
+h = colorbar;
+set(get(h,'title'), 'string', 'Time');
+box on
+pc = [Pc(:,1);Pc(:,2);Pc(:,3);Pc(:,4)];
+
+figure(2)
+%c1 = linspace(0.0, month, length(x));  
+scatter(x,pc(:,1)/1e6, 20, c1)
+xlabel('x [m]');%('$\widetilde{\chi}$ [-]');
+ylabel('P_c [MPa]')
+set(gca,'fontsize', 15)
+h = colorbar;
+set(get(h,'title'), 'string', 'Time');
+box on
+
+
+lamb  = 0.233;
+Snw        = (pc./pc_in).^(-1/lamb)
+
+figure(3)
+scatter(x,Snw(:,1), 20, c1)
+xlabel('x [m]');%('$\widetilde{\chi}$ [-]');
+ylabel('P_c [MPa]')
+set(gca,'fontsize', 15)
+h = colorbar;
+set(get(h,'title'), 'string', 'Time');
+box on
+
+
+ 
