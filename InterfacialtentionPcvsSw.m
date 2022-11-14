@@ -656,8 +656,8 @@ totaltime_d  = totaltime_d1 + totaltime_d2 + totaltime_d3 + totaltime_d4 + total
 totaltime_i  = totaltime_i1 + totaltime_i2 + totaltime_i3 + totaltime_i4 + totaltime_i5;
 totaltime    = totaltime_d + totaltime_i;
 
-%% 
-[td1, sud_1, bpd, Sarea, H, advang, pcd1, Krw, Kro, Sw, check, oc, wc, Ao, Aw, Lf] = Primary_drainage_displacement(recang, pressdrop_d1, ... 
+%% 2022.11.14
+[td1, sud_1, bpd, Sarea, H, advang, pcd1, Krw, Kro, Sw, ~, check, oc, wc, Ao, Aw, Lf] = Primary_drainage_displacement(recang, pressdrop_d1, ... 
     geometry, ift, R, porearea, watervisco,  oilvisco, pdrop, l, nt, teta, c,totaltime);
 %
 
@@ -680,36 +680,36 @@ teta   = [0 0.45*pi]; % the maximum and the initial minimum contact angle
 [timei_1, sui_1, Sarea_i, advangle, Hi, oillayer, check_i, Sw_i,pci, Krw_i, Kro_i, oc_i, wc_i, Ao_i, Aw_i, Lf] = Secondary_imbibition(geometry, bpd, advang, pressdrop_i1, R, ... 
     ift, porearea, l, pdrop, watervisco, oilvisco, check, oc,wc,Ao,Aw, nt, H, teta, c, sud_1, td1, totaltime, Lf);
 
-% Secondary drainage
+% Secondary drainage 2022.11.14
 pcmin = min(pci);
-[td2, sud_2, Sarea2, Hd2, advang2, pcd2, Krw_d, Kro_d, Sw_d, check_d, oc_d, wc_d, Ao_d, Aw_d, Lf] = Secondary_drainage_displacement(advangle, pressdrop_d2, pcmin, ... 
+[td2, sud_2, Sarea2, Hd2, advang2, pcd2, Krw_d, Kro_d, Sw_d,~, check_d, oc_d, wc_d, Ao_d, Aw_d, Lf] = Secondary_drainage_displacement(advangle, pressdrop_d2, pcmin, ... 
     geometry, ift, oillayer, R, porearea, watervisco, oilvisco, pdrop, bpd, l, oc_i, wc_i, Ao_i, Aw_i, nt, Hi, check_i, teta, c, sui_1, timei_1,totaltime, Lf) ;
 %
 %third imbibition
 [timei_2, sui_2, Sarea_i2, advang3, Hi2, oillayer,check_i2, Sw_i2, pci2, Krw_i2, Kro_i2,oc_i2, wc_i2, Ao_i2, Aw_i2, Lf] = Secondary_imbibition(geometry, bpd, advang2, pressdrop_i2, R, ... 
     ift,porearea, l, pdrop, watervisco, oilvisco, check_d, oc_d,wc_d, Ao_d, Aw_d, nt, Hd2, teta, c, sud_2, td2, totaltime, Lf);
 %
-% third drainage
+% third drainage 2022.11.14
 pcmin = min(pci2);
-[td3, sud_3, Sarea3, Hd3, advang4, pcd3, Krw_d3, Kro_d3, Sw_d3, check_d3, oc_d3, wc_d3, Ao_d3, Aw_d3, Lf] = Secondary_drainage_displacement(advang3, pressdrop_d3,pcmin, ... 
+[td3, sud_3, Sarea3, Hd3, advang4, pcd3, Krw_d3, Kro_d3, Sw_d3,~, check_d3, oc_d3, wc_d3, Ao_d3, Aw_d3, Lf] = Secondary_drainage_displacement(advang3, pressdrop_d3,pcmin, ... 
     geometry, ift, oillayer, R, porearea, watervisco, oilvisco, pdrop, bpd, l, oc_i2, wc_i2, Ao_i2, Aw_i2, nt, Hi2, check_i2, teta, c, sui_2, timei_2,totaltime, Lf) ;
 %
 % fourth imbibition
 [timei_3, sui_3, Sarea_i3,advang5, Hi3, oillayer,check_i3, Sw_i3, pci3, Krw_i3, Kro_i3, oc_i3, wc_i3, Ao_i3, Aw_i3, Lf] = Secondary_imbibition(geometry, bpd, advang4, pressdrop_i3, R, ... 
     ift,porearea, l, pdrop, watervisco, oilvisco, check_d3, oc_d3, wc_d3, Ao_d3, Aw_d3, nt, Hd3, teta, c, sud_3,td3, totaltime, Lf);
 %
-% fourth drainage 
+% fourth drainage 2022.11.14
 pcmin = min(pci3);
-[td4, sud_4, Sarea4, Hd4, advang6,  pcd4,  Krw_d4, Kro_d4, Sw_d4, check_d4, oc_d4, wc_d4, Ao_d4, Aw_d4, Lf] = Secondary_drainage_displacement(advang5, pressdrop_d4, pcmin, ... 
+[td4, sud_4, Sarea4, Hd4, advang6,  pcd4,  Krw_d4, Kro_d4, Sw_d4,~, check_d4, oc_d4, wc_d4, Ao_d4, Aw_d4, Lf] = Secondary_drainage_displacement(advang5, pressdrop_d4, pcmin, ... 
     geometry, ift, oillayer, R, porearea, watervisco, oilvisco, pdrop, bpd, l, oc_i3, wc_i3, Ao_i3, Aw_i3, nt, Hi3, check_i3, teta, c, sui_3,timei_3, totaltime, Lf) ;
 %
 % fiveth imbibition
 [timei_4, sui_4, Sarea_i4,advang7, Hi4, oillayer,check_i4, Sw_i4, pci_curve_i4, Krw_i4, Kro_i4, oc_i4, wc_i4, Ao_i4, Aw_i4, Lf] = Secondary_imbibition(geometry, bpd, advang6, pressdrop_i4, R, ... 
     ift,porearea, l, pdrop, watervisco, oilvisco, check_d4, oc_d4, wc_d4, Ao_d4, Aw_d4, nt, Hd4, teta, c, sud_4,td4, totaltime, Lf);
 %
-% fivth drainage 
+% fivth drainage 2022.11.14
 pcmin = min(pci_curve_i4);
-[td5,sud_5, Sarea5, Hd5, advang8,  pcd5,  Krw_d5, Kro_d5, Sw_d5, check_d5, oc_d5, wc_d5, Ao_d5, Aw_d5, Lf5] = Secondary_drainage_displacement(advang5, pressdrop_d5, pcmin, ... 
+[td5,sud_5, Sarea5, Hd5, advang8,  pcd5,  Krw_d5, Kro_d5, Sw_d5,~, check_d5, oc_d5, wc_d5, Ao_d5, Aw_d5, Lf5] = Secondary_drainage_displacement(advang5, pressdrop_d5, pcmin, ... 
     geometry, ift, oillayer, R, porearea, watervisco, oilvisco, pdrop, bpd, l, oc_i4, wc_i4, Ao_i4, Aw_i4, nt, Hi4, check_i4, teta, c, sui_4,timei_4, totaltime, Lf) ;
 
 % six imbibition
@@ -720,8 +720,8 @@ teta      = [0.45*pi 0.45*pi];
 pressdrop = 0.1;
 pcmin     = min(pcif);
 
-
-[td6, sud_df, Sarea2f, Hd2f, advang2f, pcd2f, Krw_df, Kro_df, Sw_df, check_df, oc_df, wc_df, Ao_df, Aw_df, Lf_df] = Secondary_drainage_displacement(advanglef, pressdrop_d6, pcmin, ... 
+% 2022.11.14
+[td6, sud_df, Sarea2f, Hd2f, advang2f, pcd2f, Krw_df, Kro_df, Sw_df,~, check_df, oc_df, wc_df, Ao_df, Aw_df, Lf_df] = Secondary_drainage_displacement(advanglef, pressdrop_d6, pcmin, ... 
     geometry, ift, oillayer, R, porearea, watervisco, oilvisco, pdrop, bpd, l, oc_i5, wc_i5, Ao_i5, Aw_i5, nt, Hi4, check_i5, teta, c, sui_5, timei_5, totaltime, Lf6) ;
 
 td1 = td1*1.15740741e-5;
